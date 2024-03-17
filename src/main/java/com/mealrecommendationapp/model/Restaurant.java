@@ -1,8 +1,7 @@
 package com.mealrecommendationapp.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -10,6 +9,9 @@ import java.util.List;
 @Table(name = "Restaurant")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Restaurant {
     @Id
     @Column
@@ -45,4 +47,7 @@ public class Restaurant {
     private Float lat;
     @Column (name = "lng")
     private Float lng;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
