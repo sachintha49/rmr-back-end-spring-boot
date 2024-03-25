@@ -1,7 +1,10 @@
 package com.mealrecommendationapp.controller;
 
+import com.mealrecommendationapp.dto.UserLoginRequest;
+import com.mealrecommendationapp.dto.UserLoginResponse;
 import com.mealrecommendationapp.exception.InvalidLoginException;
 import com.mealrecommendationapp.model.User;
+import com.mealrecommendationapp.model.UserLogin;
 import com.mealrecommendationapp.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +23,8 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<User> login(HttpServletRequest req) throws InvalidLoginException {
-        String authorization = req.getHeader(LoginService.HEADER_AUTHORIZATION);
-        User user = loginService.getLoggedUser(authorization);
-        if (user == null){
-            throw new InvalidLoginException("Invalid Credentials");
-        }
-        return ResponseEntity.ok(user);
-    }
-
-    @GetMapping(value = "/user_data")
-    public Map<String, String> getData(){
-        Map<String, String> resource = new HashMap<String, String>();
-        resource.put("user", "sample user details");
-        return resource;
+    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLogin)  {
+        UserLoginResponse response = loginService.userLogin(userLogin);
+        return ResponseEntity.ok(response);
     }
 }
