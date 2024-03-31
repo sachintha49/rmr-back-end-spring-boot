@@ -1,11 +1,8 @@
 package com.mealrecommendationapp.controller;
 
-import com.mealrecommendationapp.dto.MenuDto;
 import com.mealrecommendationapp.dto.MenuItemDto;
-import com.mealrecommendationapp.model.Cuisine;
 import com.mealrecommendationapp.model.MenuItem;
 import com.mealrecommendationapp.model.RestaurantMenuItem;
-import com.mealrecommendationapp.service.CuisineService;
 import com.mealrecommendationapp.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +34,10 @@ public class MenuController {
     public List<RestaurantMenuItem> getRestaurantMenuItems(@PathVariable("restaurantId") int restaurantId) {
         List<RestaurantMenuItem> restaurantMenuItems = menuService.getRestaurantMenuItems(restaurantId);
         return restaurantMenuItems;
+    }
+
+    @GetMapping(value = "/item/{menuItemId}")
+    public Optional<RestaurantMenuItem> getRestaurantMenuItem(@PathVariable("menuItemId") int menuItemId) {
+        return menuService.getRestaurantMenuItem(menuItemId);
     }
 }

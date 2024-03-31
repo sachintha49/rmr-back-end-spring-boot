@@ -55,4 +55,8 @@ public class MenuService {
         return restaurantMenuItems;
     }
 
+    public Optional<RestaurantMenuItem> getRestaurantMenuItem(int restaurantMenuItemId) {
+        return restaurantMenuItemRepository.findById(restaurantMenuItemId);
+    }
+
 }
