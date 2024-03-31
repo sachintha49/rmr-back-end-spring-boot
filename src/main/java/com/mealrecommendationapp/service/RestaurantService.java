@@ -4,12 +4,14 @@ import com.mealrecommendationapp.dto.RestaurantDto;
 import com.mealrecommendationapp.enums.UserRole;
 import com.mealrecommendationapp.model.Restaurant;
 import com.mealrecommendationapp.model.User;
-import com.mealrecommendationapp.model.User.UserBuilder;
 import com.mealrecommendationapp.repository.RestaurantRepository;
 import com.mealrecommendationapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RestaurantService {
@@ -54,5 +56,13 @@ public class RestaurantService {
                 .build();
 
         return restaurantRepository.save(newRestaurant);
+    }
+
+    public List<Restaurant> getAllRestaurants() {
+        return restaurantRepository.findAll();
+    }
+
+    public Optional<Restaurant> getRestaurantById(Integer id) {
+        return restaurantRepository.findById(id);
     }
 }
