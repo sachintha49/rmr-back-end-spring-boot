@@ -4,6 +4,7 @@ import com.mealrecommendationapp.dto.RestaurantDto;
 import com.mealrecommendationapp.enums.UserRole;
 import com.mealrecommendationapp.model.Restaurant;
 import com.mealrecommendationapp.model.User;
+import com.mealrecommendationapp.repository.RestaurantMenuItemRepository;
 import com.mealrecommendationapp.repository.RestaurantRepository;
 import com.mealrecommendationapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class RestaurantService {
     RestaurantRepository restaurantRepository;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    private RestaurantMenuItemRepository restaurantMenuItemRepository;
 
     @Transactional(readOnly = false)
     public Restaurant saveRestaurant(Restaurant restaurant) {
@@ -64,5 +67,13 @@ public class RestaurantService {
 
     public Optional<Restaurant> getRestaurantById(Integer id) {
         return restaurantRepository.findById(id);
+    }
+
+    public double updateMenuItemAverage(Integer id) {
+        double avg = restaurantMenuItemRepository.getAverageRatingByRestaurantId(id);
+        Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+        restaurant.get().setAvgMealRate(avg);
+        restaurantRepository.save(restaurant.get());
+        return avg;
     }
 }

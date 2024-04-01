@@ -4,10 +4,8 @@ import com.mealrecommendationapp.dto.MenuItemDto;
 import com.mealrecommendationapp.model.MenuItem;
 import com.mealrecommendationapp.model.Restaurant;
 import com.mealrecommendationapp.model.RestaurantMenuItem;
-import com.mealrecommendationapp.repository.MenuItemRepository;
-import com.mealrecommendationapp.repository.MenuRepository;
-import com.mealrecommendationapp.repository.RestaurantMenuItemRepository;
-import com.mealrecommendationapp.repository.RestaurantRepository;
+import com.mealrecommendationapp.model.RestaurantMenuItemRecommend;
+import com.mealrecommendationapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +24,8 @@ public class MenuService {
     RestaurantRepository restaurantRepository;
     @Autowired
     RestaurantMenuItemRepository restaurantMenuItemRepository;
+    @Autowired
+    private RestaurantMenuItemRecommendRepository restaurantMenuItemRecommendRepository;
 
 
     public List<MenuItem> getAllMenuItems() {
@@ -59,4 +59,26 @@ public class MenuService {
         return restaurantMenuItemRepository.findById(restaurantMenuItemId);
     }
 
+    public RestaurantMenuItemRecommend getMenuItemRecommendByMenuItemRateIdAndUserId(int menuItemId, int userId) {
+        return restaurantMenuItemRecommendRepository.findByRestaurantMenuItemIdAndUserId(menuItemId, userId);
+    }
+
+    public RestaurantMenuItemRecommend saveRestaurantMenuItemRecommend(RestaurantMenuItemRecommend restaurantMenuItemRecommend) {
+        return restaurantMenuItemRecommendRepository.save(restaurantMenuItemRecommend);
+    }
+
+    public double getAverageRecommendByMenuItemId(int menuItemId) {
+        return restaurantMenuItemRecommendRepository.getRestaurantMenuItemAverageRecommend(menuItemId);
+    }
+
+    public double getFinalRating(RestaurantMenuItem restaurantMenuItem) {
+        double avgRate = restaurantMenuItem.getAverageRate();
+        double avgRecommend = restaurantMenuItem.getAverageRecommend();
+        double avgReview = restaurantMenuItem.getAverageReview();
+        return (avgRate + avgRecommend + avgReview / 3);
+    }
+
+    public RestaurantMenuItem saveRestaurantMenuItem(RestaurantMenuItem restaurantMenuItem) {
+        return restaurantMenuItemRepository.save(restaurantMenuItem);
+    }
 }

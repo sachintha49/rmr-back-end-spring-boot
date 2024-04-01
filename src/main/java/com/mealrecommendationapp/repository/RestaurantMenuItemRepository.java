@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface RestaurantMenuItemRepository extends CrudRepository<RestaurantMenuItem, Integer> {
+
     List<RestaurantMenuItem> findByRestaurant(Restaurant restaurant);
 
     @Query("SELECT mi.id AS menu_item_id, mi.description AS menu_item_desc, mi.name, mi.id, " +
@@ -18,4 +19,10 @@ public interface RestaurantMenuItemRepository extends CrudRepository<RestaurantM
             "ON rmi.menuItem.id = mi.id " +
             "WHERE rmi.restaurant.id = :restaurantId")
     List<MenuItemDetailsDto[]> findCustomQueryByRestaurantId(Integer restaurantId);
+
+    @Query(
+            nativeQuery = true,
+            value = "select avg(avg_final) from restaurant_menu_item where restaurant_id = ?1"
+    )
+    double getAverageRatingByRestaurantId(Integer restaurantId);
 }
