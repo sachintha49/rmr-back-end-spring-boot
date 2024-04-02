@@ -1,15 +1,13 @@
 package com.mealrecommendationapp.service;
 
 import com.mealrecommendationapp.dto.MenuItemDto;
-import com.mealrecommendationapp.model.MenuItem;
-import com.mealrecommendationapp.model.Restaurant;
-import com.mealrecommendationapp.model.RestaurantMenuItem;
-import com.mealrecommendationapp.model.RestaurantMenuItemRecommend;
+import com.mealrecommendationapp.model.*;
 import com.mealrecommendationapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +24,10 @@ public class MenuService {
     RestaurantMenuItemRepository restaurantMenuItemRepository;
     @Autowired
     private RestaurantMenuItemRecommendRepository restaurantMenuItemRecommendRepository;
+    @Autowired
+    private RestaurantMenuItemRateRepository restaurantMenuItemRateRepository;
+    @Autowired
+    private MenuItemReviewRepository menuItemReviewRepository;
 
 
     public List<MenuItem> getAllMenuItems() {
@@ -75,10 +77,37 @@ public class MenuService {
         double avgRate = restaurantMenuItem.getAverageRate();
         double avgRecommend = restaurantMenuItem.getAverageRecommend();
         double avgReview = restaurantMenuItem.getAverageReview();
-        return (avgRate + avgRecommend + avgReview / 3);
+        double finalAverage =  ((avgRate + avgRecommend + avgReview) / 3);
+
+        DecimalFormat df = new DecimalFormat("#.#");
+        return Double.parseDouble(df.format(finalAverage));
     }
 
     public RestaurantMenuItem saveRestaurantMenuItem(RestaurantMenuItem restaurantMenuItem) {
         return restaurantMenuItemRepository.save(restaurantMenuItem);
+    }
+
+    public RestaurantMenuItemRate getMenuItemRateByMenuItemRateIdAndUserId(int menuItemId, int userId) {
+        return restaurantMenuItemRateRepository.findByRestaurantMenuItemIdAndUserId(menuItemId, userId);
+    }
+
+    public RestaurantMenuItemRate saveRestaurantMenuItemRate(RestaurantMenuItemRate restaurantMenuItemRate) {
+        return restaurantMenuItemRateRepository.save(restaurantMenuItemRate);
+    }
+
+    public RestaurantMenuItemReview getMenuItemReviewByMenuItemReviewIdAndUserId(int menuItemId, int userId) {
+        return menuItemReviewRepository.findByRestaurantMenuItemIdAndUserId(menuItemId, userId);
+    }
+
+    public RestaurantMenuItemReview saveRestaurantMenuItemReview(RestaurantMenuItemReview restaurantMenuItemReview) {
+        return menuItemReviewRepository.save(restaurantMenuItemReview);
+    }
+
+    public double getRestaurantMenuItemAverageReview(int menuItemId) {
+        return menuItemReviewRepository.getRestaurantMenuItemAverageRate(menuItemId);
+    }
+
+    public double getRestaurantMenuItemAverageRate(int menuItemId) {
+        return restaurantMenuItemRateRepository.getRestaurantMenuItemAverageRate(menuItemId);
     }
 }
