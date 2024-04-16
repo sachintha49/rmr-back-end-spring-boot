@@ -62,4 +62,13 @@ public class RateController {
         return response;
     }
 
+    @GetMapping(value = "/{menuItemId}")
+    public RestaurantMenuItemRate getLoginUserRating(@PathVariable("menuItemId") int menuItemId,
+                                                     @RequestParam("username") String username) {
+
+        User user = userService.getUserByUserName(username);
+
+        return menuService.getMenuItemRateByMenuItemRateIdAndUserId(menuItemId, user.getId());
+    }
+
 }

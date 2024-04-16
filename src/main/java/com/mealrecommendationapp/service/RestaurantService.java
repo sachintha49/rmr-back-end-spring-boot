@@ -71,6 +71,7 @@ public class RestaurantService {
 
     public double updateMenuItemAverage(Integer id) {
         double avg = restaurantMenuItemRepository.getAverageRatingByRestaurantId(id);
+        // double avgValue = Math.round(avg);
         Optional<Restaurant> restaurant = restaurantRepository.findById(id);
         restaurant.get().setAvgMealRate(avg);
         restaurantRepository.save(restaurant.get());

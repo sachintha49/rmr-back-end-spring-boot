@@ -47,7 +47,10 @@ public class MenuService {
         restaurantMenuItem.setSmallPrice(menuItemDto.getSmallPrice());
         restaurantMenuItem.setMediumPrice(menuItemDto.getMediumPrice());
         restaurantMenuItem.setLargePrice(menuItemDto.getLargePrice());
-
+        /*restaurantMenuItem.setAverageReview(0.0);
+        restaurantMenuItem.setAverageRate(0.0);
+        restaurantMenuItem.setAverageRecommend(0.0);
+        restaurantMenuItem.setAverageFinal(0.0);*/
         return restaurantMenuItemRepository.save(restaurantMenuItem);
     }
 
@@ -74,9 +77,9 @@ public class MenuService {
     }
 
     public double getFinalRating(RestaurantMenuItem restaurantMenuItem) {
-        double avgRate = restaurantMenuItem.getAverageRate();
-        double avgRecommend = restaurantMenuItem.getAverageRecommend();
-        double avgReview = restaurantMenuItem.getAverageReview();
+        double avgRate = restaurantMenuItem.getAverageRate() == null ? 0.0 : restaurantMenuItem.getAverageRate();
+        double avgRecommend = restaurantMenuItem.getAverageRecommend() == null ? 0.0 : restaurantMenuItem.getAverageRecommend();
+        double avgReview = restaurantMenuItem.getAverageReview() == null ? 0.0 : restaurantMenuItem.getAverageReview();
         double finalAverage =  ((avgRate + avgRecommend + avgReview) / 3);
 
         DecimalFormat df = new DecimalFormat("#.#");
@@ -109,5 +112,16 @@ public class MenuService {
 
     public double getRestaurantMenuItemAverageRate(int menuItemId) {
         return restaurantMenuItemRateRepository.getRestaurantMenuItemAverageRate(menuItemId);
+    }
+
+
+    public List<RestaurantMenuItemReview> getAllCommentAccordingToMenuItem(int menuItemId) {
+
+        List<RestaurantMenuItemReview> allMenuItemComment = menuItemReviewRepository.findAllByRestaurantMenuItemIdOrderByDateDescDateAsc(menuItemId);
+        return allMenuItemComment;
+    }
+
+    public List<RestaurantMenuItem> getAllRestaurantMenuItems() {
+        return (List<RestaurantMenuItem>) restaurantMenuItemRepository.findAll();
     }
 }

@@ -17,6 +17,7 @@ public class MenuController {
 
     @Autowired
     MenuService menuService;
+
     @GetMapping(value = "/items")
     public ResponseEntity getMenuItems() {
         List<MenuItem> menuItems = menuService.getAllMenuItems();
@@ -39,5 +40,11 @@ public class MenuController {
     @GetMapping(value = "/item/{menuItemId}")
     public Optional<RestaurantMenuItem> getRestaurantMenuItem(@PathVariable("menuItemId") int menuItemId) {
         return menuService.getRestaurantMenuItem(menuItemId);
+    }
+
+    @GetMapping(value = "/restaurant/items")
+    public ResponseEntity getRestaurantMenuItem() {
+        List<RestaurantMenuItem> menuItems = menuService.getAllRestaurantMenuItems();
+        return ResponseEntity.ok(menuItems);
     }
 }

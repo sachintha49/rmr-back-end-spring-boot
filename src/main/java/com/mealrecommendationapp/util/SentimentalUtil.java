@@ -38,7 +38,7 @@ public final class SentimentalUtil {
             String review = "I love this meal so much";
             float rate = SentimentalUtil.getSentimentRate(review);
             System.out.println(review + " : " + rate);
-            review = "Nice meal";
+            review = "This is not very good";
             rate = SentimentalUtil.getSentimentRate(review);
             System.out.println(review + " : " + rate);
             review = "my name is very good";

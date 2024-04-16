@@ -1,15 +1,18 @@
 package com.mealrecommendationapp.repository;
 
-import com.mealrecommendationapp.model.RestaurantMenuItemRate;
 import com.mealrecommendationapp.model.RestaurantMenuItemReview;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+
+import java.util.List;
 
 public interface MenuItemReviewRepository extends Repository<RestaurantMenuItemReview, Integer> {
 
     RestaurantMenuItemReview findByRestaurantMenuItemIdAndUserId(int menuItemId, int userID);
 
     RestaurantMenuItemReview save(RestaurantMenuItemReview restaurantMenuItemReview);
+
+    List<RestaurantMenuItemReview> findAllByRestaurantMenuItemIdOrderByDateDescDateAsc(int menuItemId);
 
     @Query(
             nativeQuery = true,

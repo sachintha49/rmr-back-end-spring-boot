@@ -22,7 +22,7 @@ public interface RestaurantMenuItemRepository extends CrudRepository<RestaurantM
 
     @Query(
             nativeQuery = true,
-            value = "select avg(avg_final) from restaurant_menu_item where restaurant_id = ?1"
+            value = "SELECT AVG(avg_final) FROM restaurant_menu_item WHERE restaurant_id = ?1 AND avg_final IS NOT NULL"
     )
     double getAverageRatingByRestaurantId(Integer restaurantId);
 }

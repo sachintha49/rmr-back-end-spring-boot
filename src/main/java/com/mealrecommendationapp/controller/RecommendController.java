@@ -7,10 +7,10 @@ import com.mealrecommendationapp.service.LoginService;
 import com.mealrecommendationapp.service.MenuService;
 import com.mealrecommendationapp.service.RestaurantService;
 import com.mealrecommendationapp.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Optional;
 
@@ -65,6 +65,13 @@ public class RecommendController {
         menuService.saveRestaurantMenuItem(restaurantMenuItem.get());
         restaurantService.updateMenuItemAverage(restaurantMenuItem.get().getRestaurant().getId());
         return response;
+    }
+
+    @GetMapping(value = "/{menuItemId}")
+    public RestaurantMenuItemRecommend getLoginUserRating(@PathVariable("menuItemId") int menuItemId,
+                                                          @RequestParam("username") String username) {
+        User user = userService.getUserByUserName(username);
+        return menuService.getMenuItemRecommendByMenuItemRateIdAndUserId(menuItemId, user.getId());
     }
 
 }

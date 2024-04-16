@@ -1,17 +1,16 @@
 package com.mealrecommendationapp.controller;
 
-import com.mealrecommendationapp.model.RestaurantMenuItem;
-import com.mealrecommendationapp.model.RestaurantMenuItemRate;
-import com.mealrecommendationapp.model.RestaurantMenuItemReview;
-import com.mealrecommendationapp.model.User;
+import com.mealrecommendationapp.model.*;
 import com.mealrecommendationapp.service.MenuService;
 import com.mealrecommendationapp.service.RestaurantService;
+import com.mealrecommendationapp.service.ReviewService;
 import com.mealrecommendationapp.service.UserService;
 import com.mealrecommendationapp.util.SentimentalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -19,8 +18,8 @@ import java.util.Optional;
 @RequestMapping("/review")
 public class ReviewController {
 
-    //@Autowired
-  //  private ReviewService reviewService;
+    @Autowired
+    private ReviewService reviewService;
     @Autowired
     private RestaurantService restaurantService;
     @Autowired
@@ -63,5 +62,38 @@ public class ReviewController {
         restaurantService.updateMenuItemAverage(restaurantMenuItem.get().getRestaurant().getId());
         return response;
 
+    }
+
+
+    /*get comment to a particular restaurant*/
+    @GetMapping(value = "/{restaurantId}/comment")
+    public List<RestaurantReview> getComments(@PathVariable("restaurantId") int restaurantId) throws Exception {
+        Optional<Restaurant> restaurant = restaurantService.getRestaurantById(restaurantId);
+        if (restaurant.get() != null) {
+            return reviewService.getRestaurantReviewsByRestaurantId(restaurantId);
+        } else {
+            throw new Exception("Invalid restaurant id");
+        }
+    }
+
+    /*add comment to restaurant*/
+    @PostMapping(value = "/{restaurantId}/comment")
+    public RestaurantReview submitComment(@PathVariable("restaurantId") int restaurantId,
+                                          @RequestBody RestaurantReview restaurantReview) throws Exception {
+        Optional<Restaurant> restaurant = restaurantService.getRestaurantById(restaurantId);
+        if (restaurant.get() != null) {
+            restaurantReview.setRestaurant(restaurant.get());
+            restaurantReview.setRate(SentimentalUtil.getSentimentRate(restaurantReview.getText()));
+            restaurantReview.setDate(new Date());
+            return reviewService.saveRestaurantReview(restaurantReview);
+        } else {
+            throw new Exception("Invalid restaurant id");
+        }
+    }
+
+    /*get all comments according to the menu item*/
+    @GetMapping(value = "/{menuItemId}")
+    public List<RestaurantMenuItemReview> getListOfRestaurantComment(@PathVariable("menuItemId") int menuItemId) {
+                return menuService.getAllCommentAccordingToMenuItem(menuItemId);
     }
 }
