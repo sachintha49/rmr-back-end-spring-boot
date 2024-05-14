@@ -43,4 +43,4 @@ If you encounter any problems running the program, please check the following:
 - Sachintha Punchihewa
 
 ## License
-This project is licensed under the MIT License - see the LICENSE.md file for details
+This project is licensed under the MIT License see the license for more details.
