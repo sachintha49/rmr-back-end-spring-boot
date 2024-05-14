@@ -29,8 +29,10 @@ public class LoginService {
     public UserLoginResponse userLogin(UserLoginRequest userLogin) {
 
         User user = userRepository.findByUserName(userLogin.getUsername());
-
-        if(!user.getPassword().equals(userLogin.getPassword()) && !user.getUserName().equals(userLogin.getUsername())){
+        if (user == null) {
+            throw new InvalidLoginException("These is no user name called " + userLogin.getUsername());
+        }
+        if (!user.getPassword().equals(userLogin.getPassword()) && !user.getUserName().equals(userLogin.getUsername())) {
             throw new InvalidLoginException("Invalid username and password!");
         }
 
@@ -40,7 +42,7 @@ public class LoginService {
         response.setUsername(user.getUserName());
 
         Optional<Restaurant> restaurant = Optional.ofNullable(restaurantRepository.findByUser(user));
-        if (restaurant.isPresent()){
+        if (restaurant.isPresent()) {
             response.setRestaurantId(restaurant.get().getId().toString());
         }
 

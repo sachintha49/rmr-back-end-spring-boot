@@ -44,17 +44,4 @@ public class UserServiceTest {
         User userObj = userService.saveUser(new User());
         assertEquals(user.getUserName(), userObj.getUserName());
     }
-
-  /*  @Test
-    public void getUserById() {
-        User user = new User();
-        user.setId(1);
-        user.setUserName("sachi");
-        user.setAddress("Kottawa");
-        user.setEmail("sachi@gmail.com");
-        when(userRepository.findById(any(Integer.class))).thenReturn(user);
-
-        Optional<User> userObj = userService.getUserById(1);
-        assertEquals(user.getId(), userObj.get().getId());
-    }*/
 }
